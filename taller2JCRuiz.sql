@@ -1,4 +1,4 @@
---Taller 2
+﻿--Taller 2
 --2)
 select * from estudiante
 where nombres like '%a%';
@@ -113,29 +113,9 @@ order by nombre_unid) as A
 where A.prom_creditos <= 4.0 ;
 
 ----6)
---a)
---debe ser nombre_unid | prom_salario | min_salario | max_salario
-
--- salario macc
-select * from (
-select nombre_unid, avg(salario)
+select nombre_unid, avg(salario) as prom_salario, min(salario) as min_salario, max(salario) as max_salario
 from instructor
-where nombre_unid = 'MACC'
-group by nombre_unid)
-as A;
-
---salario BIOL
-select * from (
-select nombre_unid, avg(salario)
-from instructor
-where nombre_unid = 'BIOL'
-group by nombre_unid)
-as B;
-
-
- 
-
-
+group by nombre_unid;
 
 
 
