@@ -1,4 +1,4 @@
---Taller 3 
+﻿--Taller 3 
 ----2)
 delete from curso2
 where nombre like '%4';
@@ -119,8 +119,18 @@ foreign key (curso_nombre) references curso (nombre)
  on delete cascade
  on update cascade
  );
- 
+
+--c) 
 insert into examen values('1910','programacion','2019-05-01','07:00:00','09:00:00');
 insert into examen values('1911','arquitectura','2019-05-02','11:00:00','13:00:00');
 insert into examen values('1912','algoritmos','2019-05-03','09:00:00','11:00:00');
 
+--d)
+update curso
+	set nombre = 'prog computadores'
+	where nombre = 'programacion';
+
+--e)
+--COMO DIABLOS SE HACEN OPERACIONES ENTRE FECHAS
+create view duracionExamenes as (
+	select
