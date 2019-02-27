@@ -1,4 +1,4 @@
-﻿--Taller 3 
+--Taller 3 
 ----2)
 delete from curso2
 where nombre like '%4';
@@ -37,7 +37,8 @@ from unid_acad);
 
 ----5)
 --stddev(atributo): desviacion estandar
---¿Qué hace la vista?, ejemplo en el que muestre como se actualiza
+--¿Qué hace la vista?,
+----R: es una consulta de la relacion de con la cual se crea la vista, se actualiza con modificaciones
 -----------------------------
 
 create view vista_presupuesto as
@@ -45,8 +46,7 @@ select avg(presupuesto) as prom_presupuesto, min(presupuesto) as min_presupuesto
 from unid_acad;
 
 ----6)
--- ¿Al hacer un join on atributos iguales, como accedo a los atributos que se repiten?
--- ¿tabs son necesarios en sintaxis?
+
 
 -------------------
 
@@ -62,7 +62,7 @@ insert into grupo values('003', '2', '1', 2018);
 --b) Verificando resumenGruposUnidad aparecieron las dos inserciones anteriores de BIOL
 
 ----7)
---Vista materializada: guarda en memoria (?) una vista que se crea.
+--Vista materializada: guarda en memoria una vista que se crea. hasta que se refresque (VER PUNTO C) no se actualiza
 create materialized view instructorUbic as (
 	select nombres,apellidos,edificio
 	from instructor join unid_acad
@@ -81,7 +81,7 @@ refresh materialized view instructorUbic;
 
 --d) Si se verifica aparece el nuevo registro insertado en el literal a)
 
-----8) TRANSACCIONES --EN QUÉ ORDEN FUNCIONA COMMIT Y ROLLBACK DESDE CONSOLA/ EN PGADMIN4 ?
+----8) TRANSACCIONES
 --Si se ejecuta las instrucciones sin commit o nada hay una modificación.
 -- ANTES DE REALIZAR LA CONFIRMACIÓN:COMMIT: confirma la modificacion/ ROLLBACK: revierte la modificacion
 --a)
@@ -108,6 +108,8 @@ add constraint nombresUnicos unique (nombre);
 
 --b)
 --Como funciona on MODIFICACION cascade?
+--R:  on delete cascade: 	Si se borra un registro con un nombre en  la relacion 'curso'
+-- se borran todos los registros en los cuales aparece el nombre en la tabla 'examen'
 create table examen
 (examen_cod varchar(7),
 curso_nombre varchar(20),
@@ -131,6 +133,54 @@ update curso
 	where nombre = 'programacion';
 
 --e)
---COMO DIABLOS SE HACEN OPERACIONES ENTRE FECHAS
-create view duracionExamenes as (
-	select
+-- si se quiere operar con fechas  y EXTRAER datos
+select curso_nombre, hora_inicio, extract (hour from hora_fin - hora_inicio)
+from examen;
+
+-- si se quiere solo OPERAR CON FECHAS
+/*
+select curso_nombre, hora_inicio, hora_fin - hora_inicio
+from examen;
+*/
+
+create view duracionExamenes as
+	select curso_nombre, extract (hour from hora_inicio) as hora, hora_fin - hora_inicio as duracion
+	from examen;
+	
+----10)
+--CREANDO DOMINIOS (TIPOS CREADOS)
+create domain credito as
+	int check(value > 0);
+	
+--Modificando tipo de dato de una olumna
+alter table curso
+	alter column creditos type credito;
+	
+-- 11) AUTORIZACIONES DE ACCESO
+-- PARA CREAR USUARIOS Y ROLES : 1) DESCONECTARSE Y CONECTARSE COMO POSTGRES, 2) CREAR USUARIOS/ ROLES EN  LA TERMINAL
+--a)
+--creando usuarios
+create user ramon with password 'ramon';
+grant select on unid_acad;
+
+--b)
+select * from unid_acad;
+-- no se va a poder, PERMISOS DENEGADOS
+insert into unid_acad values('FILO','Cabal',1250);
+
+--c)
+-- Creando roles ,es decir, 'grupos' de usuarios
+create role planeacion;
+grant insert on unid_acad to ramon;
+--Otorgando permisos de rol a rol
+grant planeacion to ramon;
+
+insert into unid_acad values('ADMIN','Norte',1700);
+
+
+
+
+
+	
+
+	
