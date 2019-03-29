@@ -1,0 +1,33 @@
+grupo (curso_cod,nombre_curso, num_creditos, grupo_id, unid_acad, año, edificio, salón, capacidad,hora)
+
+curso_cod --> nombre_curso, unid_acad, num_creditos
+edificio, salón --> capacidad
+curso_cod, grupo_id, año --> edificio,m salón, hora
+
+
+#dESPUES DE EVALUAR ALFA --> BETA: CAMBIAR DE DEPENDENCIA
+result = {R}
+1)
+¿Hay un esquema Ri en result que no esté en Forma normal 2? SI
+	ALFA -->BETA : curso_cod --> nombre_curso, unid_acad, num_creditos
+	- R2: Ri - BETA: curso_cod, grupo_id,año, edificio, salón, capacidad,hora
+	- R1: {ALFA,BETA}:  curso_cod,  nombre_curso, unid_acad, num_creditos -->
+	SUPERLLAVE EN {ALFA,BETA}: curso_cod
+
+
+2)
+result = {{curso_cod, grupo_id,año, edificio, salón, capacidad,hora},
+	 {curso_cod,  nombre_curso, unid_acad, num_creditos}
+	= {R1,R2}
+¿Hay un esquema Ri en result que no esté en Forma normal 2? SI
+	D1 no aplica porque D1 tiene atriburos que R1 no tiene
+	ALFA -->BETA: edificio, salón --> capacidad
+	R4: Ri - BETA: curso_cod, grupo_id,año, edificio, salón,hora ----> esta en 2a FM ? NO APLICA
+	R3: {ALFA,BETA}: edificio, salón, capacidad
+
+3)
+result = {R1,R3,R4}
+}
+ VERIFICAR CON LA DEPENDENCIA ALFA-->BETA ACTUAL Y CON LAS QUE FALTAN SI Ri no está en 2a FN o si NO APLICA
+
+AQUI TERMINA
