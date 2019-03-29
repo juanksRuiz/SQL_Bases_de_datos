@@ -4,7 +4,6 @@ create table author(
 	URL varchar(100),
 	primary key (name)
 );
- --deberia ser formato date el año ?
  --numeric: digitos totales y despues de la coma
  -- si la relacion solo tiene un atributo ese es l llave primaria
 create table book(
@@ -71,7 +70,7 @@ create table published_by (
 );
 
 create table contains(
-	ISBN integer,
+	ISBN int,
 	basket_id varchar(20),
 	number integer,
 	primary key (ISBN,basket_id),
@@ -81,10 +80,35 @@ create table contains(
 
 create table stocks (
 	ISBN integer,
-	code varchar (20),si
+	code varchar (20),
 	number integer,
 	primary key(ISBN,code),
 	foreign key(ISBN) references book(ISBN),
 	foreign key(code) references warehouse(code)
 );
+
+--Extensión
+create table electronic_product(
+	ID varchar(8),
+	enterprise_name varchar(20),
+	price float ,
+	primary key (ID)
+);
+
+create table cellphone(
+	ID varchar(8),
+	operator varchar(20),
+	primary key (ID),
+	foreign key (ID) references electronic_product(ID)
+);
+
+create table tablet(
+	ID varchar(8),
+	number_apps int,
+	primary key (ID),
+	foreign key (ID) references electronic_product(ID)
+);
+
+
+	
 
