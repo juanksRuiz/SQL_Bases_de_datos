@@ -31,3 +31,73 @@ result = {R1,R3,R4}
  VERIFICAR CON LA DEPENDENCIA ALFA-->BETA ACTUAL Y CON LAS QUE FALTAN SI Ri no está en 2a FN o si NO APLICA
 
 AQUI TERMINA
+
+------------------------------
+ALGORITMO COBERTURA MINIMA DE F(F)
+ej:
+dir_empleado(ID,direccion,ciudad)
+F = {dir -->ciudad,
+     ID --> dir,
+     ID,dir --> ciudad}
+
+Encuentre Fc
+
+
+0)
+Fc = F
+
+1)
+uniones? NO
+ID es extraño ? SI:
+	Fc = {dir -->ciudad,
+     	      ID --> dir}
+
+2)uniones? NO
+hay atributos extraños ? NO
+
+RETORNA: Fc = {dir -->ciudad,
+     	      ID --> dir}
+
+----------------------------
+ej: empleado(ID,usuario,código)
+F = {ID-->usuario,codigo,
+	usuario -->ID,codigo,
+	codigo --> ID,usuario,
+}
+
+0)
+Fc = F
+
+1)
+uniones ? NO
+atributos extraños ? SI : 'codigo' en  usuario -->ID,codigo,
+	Fc = {ID-->usuario,codigo,
+	usuario -->ID,
+	codigo --> ID,usuario,
+}
+
+2)
+uniones ? NO
+atributos extraños ? SI : 'usuario' en ID-->usuario,codigo
+	Fc = {ID-->codigo,
+	usuario -->ID,
+	codigo --> ID,usuario
+}
+
+3)
+uniones ? NO
+atributos extraños ? SI 'usuario' en codigo --> ID,usuario,
+	Fc = {ID-->codigo,
+	usuario -->ID,
+	codigo --> ID
+}
+
+4)
+unniones ? NO
+atributos extraños ? NO
+NO HAY CAMBIO
+
+RETURN Fc = {ID-->codigo,
+	usuario -->ID,
+	codigo --> ID
+}
