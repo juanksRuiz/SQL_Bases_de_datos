@@ -1,0 +1,65 @@
+ejemplo:
+asesorUnidad(estID,instID,nombre_unidad)
+
+F = {
+instID --> nombre_unidad,
+estID, nombre_unidad --> instID
+}
+
+a) Aplique PruebaBCNF (2FN) para saber si estáe en BCNF o no
+
+2^R = {
+R1: {estID},
+R2: {instID},
+R3: {nombre_unidad},
+R4:{estID, instID},
+R5: {estID, nombre_unidad},
+R6:{instID, nombre_unidad},
+R7:{estID,instID,nombre_unidad}
+}
+1)
+R1+ = R1 , R-alfa = {instID,nombre_unidad}
+alfa+ incluye atributos en R - alfa ? NO
+	estID --> X ES TRIVIAL
+
+2)
+R2: {instID}
+R2+ = nombre_unidad , R - alfa = estID, nombre_unidad
+alfa+ incluye atributos en R - alfa ? SI
+
+--> El esquema no está en BCNF con respecto a la dependencia:
+alfa -->(alfa+ - alfa) Y R = instID--> nombre_unidad
+
+
+
+function NORMALIZAR BCNF(asesorUnidad,F):
+2.1)
+asesorUnidad no está en BCNF con respecto a instID -->nombre_unidad
+	R1 = estID,instID
+	R2 = instID,nombre_unidad
+
+3)
+R1 está en BCNF con respecto a F ?
+
+- alfa = estID 	 alfa+ = estID
+	estID-->X es trivial
+- alfa = {instID} 	 alfa+ = instID
+R1 - alfa = {instID}
+EL ESQUEMA NO ESTÁ EN BCNF con respecto a instID --> vacio : NO APLICA
+
+- alfa = {estID,instID} alfa+  = R1
+
+
+4)
+R2
+alfa = instID		alfa+ = nombre_unidad 	 R2 - alfa = {nombre_unidad}
+El esquema no está en BCNF con respecto a la dependencia:
+instID --> nombre_unidad
+
+function NORMALIZAR BCNF(asesorUnidad,F):
+
+
+
+
+
+
