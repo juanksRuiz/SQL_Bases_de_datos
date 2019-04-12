@@ -13,7 +13,7 @@ public class EjemploConexionPostgreSQL_taller3_v2 {
     	
     	//Intenta establecer conexi�n
     	System.out.println("Estableciendo conexi�n...");
-        try (Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/taller3", "postgres", "postgres")) {
+        try (Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Apps_JCRuiz", "postgres", "postgres")) {
  
             
             System.out.println("Conexion con la base de datos establecida (PostgreSQL)");
