@@ -10,15 +10,16 @@
 #ifndef PAGINA_H_
 #define PAGINA_H_
 
-const std::size_t TAMANO = 4000; //KB
+const std::size_t TAMANO_ARREGLO = 1000;
 template <typename TipoDato>
 class Pagina{
 
 private:
-	//Creando un apuntador de arreglos TipoDato (aquí tupla)
-	TipoDato *pag[TAMANO]; // arreglo dinamico de objetos Tupla
-	std::string idPag;
-	int espaciosUsados;
+	//Creando un arreglo de apuntadores
+	TipoDato *pag[TAMANO_ARREGLO]; // arreglo dinamico de objetos Tupla
+	//int idPag;
+	int count;
+	const int capacity;
 
 
 public:
@@ -29,6 +30,8 @@ public:
 	void eliminarTupla();
 
 	int getEspaciosUsados();
+
+	int getEspacioDisponible();
 
 	~Pagina<TipoDato>();
 
