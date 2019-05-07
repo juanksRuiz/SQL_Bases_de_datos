@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <list>
 #include "Tupla.h"
 #include "Pagina.h"
 

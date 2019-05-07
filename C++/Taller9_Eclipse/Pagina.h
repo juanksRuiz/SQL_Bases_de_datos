@@ -22,6 +22,14 @@ private:
 	// # de elementos en el arreglo
 	int count;
 	const int capacity;
+	std::string codigo;
+
+	//Tiene encabezado: # de espacios usados, ubicación del último espacio lleno)
+
+	//arreglo de posiciones: la ultima de cada uno;
+	std::list<int> l;
+
+	Tupla  arreglo[] ;
 
 
 public:
