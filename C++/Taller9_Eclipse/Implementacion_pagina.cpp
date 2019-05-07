@@ -32,14 +32,44 @@ void Pagina<TipoDato>:: eliminarTupla(){
 
 template <typename TipoDato>
 int Pagina<TipoDato>::getEspaciosUsados(){
-	return count*4;
+	if(count == 0){
+		return 0;
+	}else{
+		int ocupados = 0;
+				for(int i = 0; i < count; i++){
+					//Esta sintaxis funciona ?
+					ocupados = ocupados + *pag[i].getSize();
+				}
+				return ocupados;
+	}
 }
 
 
 template <typename TipoDato>
 int Pagina<TipoDato>::getEspacioDisponible(){
-	return (capacity - 4*count);
+	//tomar todos las las longitudes de las tuplas presentes
+	if(count == 0){
+		return capacity;
+	}else{
+		// la sintaxis está bien ?
+		return (capacity - this->getEspaciosUsados());
+
+	}
+
 }
 
-//verificar en java
-// insertar en el sql al zyklorecolector
+template <typename TipoDato>
+Pagina<TipoDato>::~Pagina(){
+	// Ver como se borran los elementos en un vector
+	if(count == 0){
+		delete pag;
+		//Hay que hacer delete con cada elemento del arreglo ?
+	}else{
+		while(count <= 0){
+			Tupla * t = pag[count -1];
+			delete t;
+		}
+		// se borra tambien el arreglo ?
+	}
+}
+

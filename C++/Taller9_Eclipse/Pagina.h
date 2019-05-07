@@ -18,6 +18,8 @@ private:
 	//Creando un arreglo de apuntadores
 	TipoDato *pag[TAMANO_ARREGLO]; // arreglo dinamico de objetos Tupla
 	//int idPag;
+
+	// # de elementos en el arreglo
 	int count;
 	const int capacity;
 
