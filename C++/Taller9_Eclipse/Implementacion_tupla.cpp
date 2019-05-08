@@ -10,12 +10,12 @@
 using namespace std;
 // buscar como ponerle varios tipos a un arreglo
 
-Tupla::Tupla(string nombres, string apellidos, int miID, string miCarrera){
+Tupla::Tupla(string nombres, string apellidos, std::string miID, string miCarrera){
 	Nombres = nombres;
 	Apellidos = apellidos;
 	ID = miID;
 	Carrera = miCarrera;
-	size = 4;
+	size = 4; // va a depender
 }
 
 string Tupla::getNombres(){
@@ -26,7 +26,7 @@ string Tupla::getApellidos(){
 	return Apellidos;
 }
 
-int Tupla::getID(){
+string Tupla::getID(){
 	return ID;
 }
 
@@ -38,6 +38,9 @@ int Tupla::getSize(){
 	//retorna cantidad de elementos de la tupla
 	return size;
 }
+
+
+
 
 
 // Si se tuviera un arreglo de direcciones se borra cada elemento del arreglo

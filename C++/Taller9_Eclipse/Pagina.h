@@ -10,30 +10,35 @@
 #ifndef PAGINA_H_
 #define PAGINA_H_
 
-const std::size_t TAMANO_ARREGLO = 1000;
 template <typename TipoDato>
 class Pagina{
 
 private:
-	//Creando un arreglo de apuntadores
-	TipoDato *pag[TAMANO_ARREGLO]; // arreglo dinamico de objetos Tupla
-	//int idPag;
+	//numero de espacios incluye encabezado ?
+	//Creando un arreglo de apuntadores a tuplas
+	//con getTuplePosition se obtendrá el indice
+	TipoDato *positionArray[];
+	// VARIA
 
-	// # de elementos en el arreglo
-	int count;
-	const int capacity;
-	std::string codigo;
+	//Tiene encabezado: # de espacios usados (funcion), codigo, capacidad
 
-	//Tiene encabezado: # de espacios usados, ubicación del último espacio lleno)
+	int count; // # de tuplas en el arreglo
+	int espaciosUsados; // metadato
+	const int capacity; // metadato
+	std::string codigo; // metadato
+
+
 
 	//arreglo de posiciones: la ultima de cada uno;
-	std::list<int> l;
 
-	Tupla  arreglo[] ;
+	Tupla  arreglo[1000] ; // arreglo fijo SUFICIENTEMENTE GRANDE para almacenar tuplas
+	// NO EFICIENTE EN MEMORIA , 1000 elegido al comienzo arbitrariamente
+	// CORREGIR PARA HACER MÁS EFICIENTE
 
+	void expandCapacity();
 
 public:
-	Pagina<TipoDato>();
+	Pagina<TipoDato>(std::string cod);
 
 	void agregarTupla(Tupla tupla);
 

@@ -15,22 +15,24 @@ class Tupla{
 private:
 	std::string Nombres;
 	std::string Apellidos;
-	int ID;
+	std::string ID;
 	std::string Carrera;
 	int size;
 
 public:
-	Tupla(std::string Nombres, std::string Apellidos, int ID, std::string Carrera);
+	Tupla(std::string Nombres, std::string Apellidos, std::string ID, std::string Carrera);
 
 	std::string getNombres();
 
 	std:: string getApellidos();
 
-	int getID();
+	std::string getID();
 
 	std::string getCarrera();
 
 	int getSize();
+
+	std::string toString();
 // destructor hace falta si se usa memoria dinamica: en este caso no;
 	//~Tupla();
 };

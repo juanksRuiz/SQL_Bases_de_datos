@@ -7,70 +7,80 @@
 
 #include <iostream>
 #include <string>
-#include <list>
+#include <map>
 #include "Tupla.h"
 #include "Pagina.h"
 
 using namespace std;
+
+const std::size_t TAMANO_PAG  = 4000; //FIJO
+int idx = 0;
+
 template <typename TipoDato>
-Pagina<TipoDato>::Pagina(){
+Pagina<TipoDato>::Pagina(string cod){
+	capacity = TAMANO_PAG;
 	count = 0;
-	capacity = 4000;
+	codigo = cod;
+	espaciosUsados = 0;
+
 }
-//crear arreglo de apunadores
+
+
+
+//Destructor - CORREGIR
+/*
 template <typename TipoDato>
+Pagina<TipoDato>::~Pagina(){
+	delete ;// con [] elimina  el bloque de memoria
+}
+*/
+
+template<typename TipoDato>
 void Pagina<TipoDato>::agregarTupla(Tupla tupla){
-	tupla[count] = &tupla;
-	count++;
-}
-
-template <typename TipoDato>
-void Pagina<TipoDato>:: eliminarTupla(){
-	pag[count-4];
-
-
-}
-
-template <typename TipoDato>
-int Pagina<TipoDato>::getEspaciosUsados(){
-	if(count == 0){
-		return 0;
-	}else{
-		int ocupados = 0;
-				for(int i = 0; i < count; i++){
-					//Esta sintaxis funciona ?
-					ocupados = ocupados + *pag[i].getSize();
-				}
-				return ocupados;
+	if(getEspacioDisponible() < tupla.getSize()){
+		cerr <<"ERROR: CAPACIDAD MAXIMA DE PAGINA ALCANZADA" << endl;
+		return;
 	}
+	//agregando Tupla a arreglo de posiciones
+	arreglo[count] = tupla;
+
+	//asumiendo que hay espacio suficiente en el arreglo de posiciones
+	positionArray[count] = &tupla;
+	espaciosUsados = espaciosUsados + tupla.getSize();
+	count++;
+
+}
+
+template <typename TipoDato>
+void Pagina<TipoDato>::eliminarTupla(){
+	//Borra siempre la ultima Tupla: como en el stack
+	if(count == 0){
+		cerr << "Error: intenta eliminar elemento de una Pagina vacia";
+	}else{
+		espaciosUsados = espaciosUsados - arreglo[count-1].getSize();
+		positionArray[count-1];
+		arreglo[count-1];
+		count--;
+	}
+
+}
+
+
+template<typename TipoDato>
+int Pagina<TipoDato>::getEspaciosUsados(){
+	return espaciosUsados;
 }
 
 
 template <typename TipoDato>
 int Pagina<TipoDato>::getEspacioDisponible(){
-	//tomar todos las las longitudes de las tuplas presentes
-	if(count == 0){
-		return capacity;
-	}else{
-		// la sintaxis está bien ?
-		return (capacity - this->getEspaciosUsados());
-
-	}
-
+	return (capacity - espaciosUsados);
 }
 
-template <typename TipoDato>
+//verificar
+template<typename TipoDato>
 Pagina<TipoDato>::~Pagina(){
-	// Ver como se borran los elementos en un vector
-	if(count == 0){
-		delete pag;
-		//Hay que hacer delete con cada elemento del arreglo ?
-	}else{
-		while(count <= 0){
-			Tupla * t = pag[count -1];
-			delete t;
-		}
-		// se borra tambien el arreglo ?
-	}
-}
+	delete[] positionArray;
+	delete[] arreglo;
 
+}
