@@ -15,7 +15,7 @@ Tupla::Tupla(string nombres, string apellidos, std::string miID, string miCarrer
 	Apellidos = apellidos;
 	ID = miID;
 	Carrera = miCarrera;
-	size = 4; // va a depender
+	size = sizeof(Nombres) + sizeof(Apellidos)+sizeof(ID) + sizeof(Carrera); // Suma de sizeof
 }
 
 string Tupla::getNombres(){

@@ -7,21 +7,20 @@
 
 #include <iostream>
 #include <string>
-#include <map>
 #include "Tupla.h"
 #include "Pagina.h"
 
 using namespace std;
 
 const std::size_t TAMANO_PAG  = 4000; //FIJO
-int idx = 0;
 
 template <typename TipoDato>
-Pagina<TipoDato>::Pagina(string cod){
-	capacity = TAMANO_PAG;
+Pagina<TipoDato>::Pagina(int cod){
+	capacity = TAMANO_PAG; // es eficiente o necesario crear de una el arreglo de 4000 posiciones ?
 	count = 0;
 	codigo = cod;
 	espaciosUsados = 0;
+	positionArray = new TipoDato*[TAMANO_PAG];
 
 }
 
@@ -55,14 +54,17 @@ template <typename TipoDato>
 void Pagina<TipoDato>::eliminarTupla(){
 	//Borra siempre la ultima Tupla: como en el stack
 	if(count == 0){
-		cerr << "Error: intenta eliminar elemento de una Pagina vacia";
+		cerr << "Error: intenta eliminar elemento de una Pagina vacia"<<endl;
 	}else{
 		espaciosUsados = espaciosUsados - arreglo[count-1].getSize();
-		positionArray[count-1];
-		arreglo[count-1];
 		count--;
 	}
 
+}
+
+template <typename TipoDato>
+bool Pagina<TipoDato>::hasSpaceForTuple(Tupla tupla){
+	return (getEspacioDisponible() >= tupla.getSize());
 }
 
 
@@ -77,10 +79,16 @@ int Pagina<TipoDato>::getEspacioDisponible(){
 	return (capacity - espaciosUsados);
 }
 
+template <typename TipoDato>
+bool Pagina<TipoDato>::isEmpty(){
+	return count == 0;
+}
+
 //verificar
 template<typename TipoDato>
 Pagina<TipoDato>::~Pagina(){
 	delete[] positionArray;
 	delete[] arreglo;
+
 
 }
