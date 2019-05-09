@@ -53,6 +53,8 @@ private:
 	CeldaPagina *header;
 	CeldaPagina *pagOcupadasCursor;
 	CeldaPagina *pagLibresCursor;
+
+	void crearPagina();
 };
 
 #endif /* ARCHIVO_H_ */

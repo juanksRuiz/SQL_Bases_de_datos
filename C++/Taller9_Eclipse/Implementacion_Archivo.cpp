@@ -6,6 +6,7 @@
  */
 #include <iostream>
 #include "Archivo.h"
+#include "Pagina.h"
 #include "Tupla.h"
 
 //Paginas ocupadas a la izquierda, paginas con espacio a la derecha
@@ -72,18 +73,40 @@ void Archivo<DataType>::moverCursor_PagOcupadas_AlFinal(){
 	}
 }
 
+//Crear Pagina
+template <typename DataType>
+void Archivo<DataType>::crearPagina(){
+	//Crea una pagina en la celda de parametro
+	//moverCursor_PagLibres_AlFinal();
+	CeldaPagina *cp = new CeldaPagina;
+	DataType pg;
+	cp->pag = pg;
+	cp->frontLink = NULL;
+	cp->backLink = pagLibresCursor;
+	pagLibresCursor->frontLink = cp;
+	pagLibresCursor = cp;
+}
+
 //Insertar y eliminar tuplas
 template <typename DataType>
 void Archivo<DataType>::insertarTupla(Tupla tupla){
-	//verificacion del espacio disponible desde header
-	moverCursor_PagLibres_AlInicio();
-	if(pagLibresCursor->frontLink == NULL){
-		CeldaPagina *cp = new CeldaPagina;
-		cp->backLink = pagLibresCursor->frontLink;
-		pagLibresCursor->frontLink = cp;
-		pagLibresCursor = cp;
-		//Verificar sintaxis
-		cp->pag.agregarTupla(tupla);
+	//suponiendo que el cursor está en la ultima pagina
+	if(pagLibresCursor == header){
+		crearPagina();
+		pagLibresCursor->pag.agregarTupla(tupla);
+		return;
+	}else{
+		pagLibresCursor = header->frontLink;
+		while(pagLibresCursor->frontLink != NULL){
+			if(pagLibresCursor->pag.hasSpaceForTuple(tupla)){
+				pagLibresCursor->pag.agregarTupla(tupla);
+				return;
+			}else{
+				pagLibresCursor = pagLibresCursor->frontLink;
+			}
+		}
+		crearPagina();
+		pagLibresCursor->pag.agregarTupla(tupla);
 	}
 
 }
