@@ -6,44 +6,35 @@
  */
 
 #include <iostream>
+#include <list>
 #include "Tupla.h"
+
+
 #ifndef PAGINA_H_
 #define PAGINA_H_
 
-const std::size_t TAMANO_PAG  = 4000; //FIJO
-template <typename TipoDato>
+const std::size_t TAMANO_PAG  = 4096;//fijo
+//Cada pagina deberia construirla con un arhivo.dat
+
+// O lista con tuplas o lista de apuntadores con tuplas: lista enlazada
+//-- > MAs compacto si arreglo de tuplas
 class Pagina{
 
 private:
-	//numero de espacios incluye encabezado ?
-	//Creando un arreglo de apuntadores a tuplas
-	//con getTuplePosition se obtendrá el indice
-	TipoDato **positionArray;
-	// VARIA
-
-	//Tiene encabezado: # de espacios usados (funcion), codigo, capacidad
-
+	// Header
 	int count; // # de tuplas en el arreglo
-	int espaciosUsados; // metadato
-	const int capacity; // metadato
-	int codigo; // metadato-- cuando el archivo cree una nueva pagina el codigo es el indice
+	int espaciosUsados; // metadato - en bytes
+	int posLast; // indice,bytes
+	//int codigo; // metadato-- cuando el archivo cree una nueva pagina el codigo es el indice
 
-
-
-	//arreglo de posiciones: la ultima de cada uno;
-
-	Tupla  arreglo[TAMANO_PAG] ; // arreglo fijo SUFICIENTEMENTE GRANDE para almacenar tuplas
-	// NO EFICIENTE EN MEMORIA , 1000 elegido al comienzo arbitrariamente
-	// CORREGIR PARA HACER MÁS EFICIENTE
-
-	void expandCapacity();
+	std::list<Tupla> tupleList;
 
 public:
-	Pagina<TipoDato>(int cod);
+	Pagina();
 
 	void agregarTupla(Tupla tupla);
 
-	void eliminarTupla();
+	void deleteTupleAt(int idx);
 
 	bool hasSpaceForTuple(Tupla tupla);
 
@@ -53,10 +44,20 @@ public:
 
 	bool isEmpty();
 
-	~Pagina<TipoDato>();
+	~Pagina();
 
 };
 
 
-
 #endif /* PAGINA_H_ */
+
+
+
+// PARA CREAR EN DISCO:
+	/*
+	 * CREAR ARCHIVOS QUE REPRESENTA PAGINA: "nombreTablaIDPag.dat"
+	 * archivo de tipo binario
+	 * FOTOS
+	 *
+	 * */
+

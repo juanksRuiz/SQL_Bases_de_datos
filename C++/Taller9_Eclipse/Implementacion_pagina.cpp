@@ -12,17 +12,16 @@
 
 using namespace std;
 
-const std::size_t TAMANO_PAG  = 4000; //FIJO
 
-template <typename TipoDato>
-Pagina<TipoDato>::Pagina(int cod){
-	capacity = TAMANO_PAG; // es eficiente o necesario crear de una el arreglo de 4000 posiciones ?
+//Corregir espacios disponibles de pagina
+Pagina::Pagina(){
 	count = 0;
-	codigo = cod;
 	espaciosUsados = 0;
-	positionArray = new TipoDato*[TAMANO_PAG];
-
+	posLast = TAMANO_PAG;
+	tupleList = {};
 }
+
+
 
 
 
@@ -34,61 +33,54 @@ Pagina<TipoDato>::~Pagina(){
 }
 */
 
-template<typename TipoDato>
-void Pagina<TipoDato>::agregarTupla(Tupla tupla){
+void Pagina::agregarTupla(Tupla tupla){
 	if(getEspacioDisponible() < tupla.getSize()){
 		cerr <<"ERROR: CAPACIDAD MAXIMA DE PAGINA ALCANZADA" << endl;
 		return;
 	}
-	//agregando Tupla a arreglo de posiciones
-	arreglo[count] = tupla;
-
-	//asumiendo que hay espacio suficiente en el arreglo de posiciones
-	positionArray[count] = &tupla;
-	espaciosUsados = espaciosUsados + tupla.getSize();
 	count++;
+	espaciosUsados = espaciosUsados + tupla.getSize();
+	posLast = posLast - tupla.getSize();
+	tupleList.push_back(tupla);
 
 }
 
-template <typename TipoDato>
-void Pagina<TipoDato>::eliminarTupla(){
+
+void Pagina::deleteTupleAt(int idx){
 	//Borra siempre la ultima Tupla: como en el stack
 	if(count == 0){
 		cerr << "Error: intenta eliminar elemento de una Pagina vacia"<<endl;
 	}else{
-		espaciosUsados = espaciosUsados - arreglo[count-1].getSize();
+		espaciosUsados = espaciosUsados - tupleList.back().getSize();
+		posLast = posLast + tupleList.back().getSize();
+		list<Tupla>::iterator it;
+		it = tupleList.begin();
+		for(int i = 0; i < idx; i++){
+			advance(it,idx);
+		}
+		tupleList.erase(it);
 		count--;
 	}
 
 }
 
-template <typename TipoDato>
-bool Pagina<TipoDato>::hasSpaceForTuple(Tupla tupla){
+bool Pagina::hasSpaceForTuple(Tupla tupla){
 	return (getEspacioDisponible() >= tupla.getSize());
 }
 
-
-template<typename TipoDato>
-int Pagina<TipoDato>::getEspaciosUsados(){
+int Pagina::getEspaciosUsados(){
 	return espaciosUsados;
 }
 
 
-template <typename TipoDato>
-int Pagina<TipoDato>::getEspacioDisponible(){
-	return (capacity - espaciosUsados);
+int Pagina::getEspacioDisponible(){
+	return (TAMANO_PAG - espaciosUsados);
 }
 
-template <typename TipoDato>
-bool Pagina<TipoDato>::isEmpty(){
+
+bool Pagina::isEmpty(){
+	//cuenta el numero de tuplas
 	return count == 0;
 }
 
-//verificar
-template<typename TipoDato>
-Pagina<TipoDato>::~Pagina(){
-	delete[] positionArray;
-	delete[] arreglo;
 
-
-}

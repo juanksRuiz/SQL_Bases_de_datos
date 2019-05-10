@@ -8,9 +8,10 @@
 // Los objetos tupla que representan una entidad se pueden tratar como clases "usuales"
 #include <iostream>
 
-
+//En este caso la tupla es fija
 #ifndef TUPLA_H_
 #define TUPLA_H_
+//Representacion en memoria
 class Tupla{
 private:
 	std::string Nombres;
@@ -40,3 +41,11 @@ public:
 
 
 #endif /* TUPLA_H_ */
+
+// en genral la representacion en Disco es un arreglo de bytes
+
+//Representacion en disco
+//Arreglo de bytes
+/*
+ *
+ * */

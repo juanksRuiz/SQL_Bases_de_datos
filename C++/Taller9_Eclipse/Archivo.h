@@ -5,15 +5,28 @@
  *      Author: lovelace
  */
 
+//En memoria es un objeto, si se desconecta se pierde
+// En disco: se mantiene
+
+// En memoria
+//1) Representar en memoria la tabla
+//2) Almacenar en disco la m
+
+//Metadatos
+//- ID Archivo / nombre tabla
+//- Campos:
+//		tipos, nombres, variables, fijos
 #include <iostream>
+#include <list>
 #include "Tupla.h"
 #include "Pagina.h"
+
 #ifndef ARCHIVO_H_
 #define ARCHIVO_H_
 //archivo es una listaenlazada que además tiene un directorio
 //No reconoce la clase Pagina
 //Pensar en como incluir los metadatos
-template <typename DataType>
+
 class Archivo {
 public:
 	Archivo();
@@ -44,17 +57,22 @@ public:
 
 private:
 	// Estructura para almacenar cada pagina en una celda
+	std::string idArchivo; // Dado por el usuario
+	std::list<std::string> nombres;
+	std::list<std::string>  tipos ;
+	std::list<bool> isFixedArray;
+
 	struct CeldaPagina{
-		DataType pag; // No reconoce la clase pagina
-		CeldaPagina *frontLink;
-		CeldaPagina *backLink;
-	};
+			Pagina pag =  Pagina(); // No reconoce la clase pagina
+			CeldaPagina *frontLink;
+			CeldaPagina *backLink;
+		};
 
-	CeldaPagina *header;
-	CeldaPagina *pagOcupadasCursor;
-	CeldaPagina *pagLibresCursor;
+		CeldaPagina *header;
+		CeldaPagina *pagOcupadasCursor;
+		CeldaPagina *pagLibresCursor;
 
-	void crearPagina();
+		void crearPagina();
 	void moverPaginaOcupada();
 };
 

@@ -12,15 +12,14 @@
 //Paginas ocupadas a la izquierda, paginas con espacio a la derecha
 using namespace std;
 
-template <typename DataType>
-Archivo<DataType>::Archivo(){
+
+Archivo::Archivo(){
 	header = pagOcupadasCursor  = pagLibresCursor= new CeldaPagina;
 	header->frontLink = NULL;
 	header ->backLink = NULL;
 }
 
-template <typename DataType>
-Archivo<DataType>::~Archivo(){
+Archivo::~Archivo(){
 	//Verificar
 	moverCursor_PagLibres_AlFinal();
 	CeldaPagina *cpl = pagLibresCursor;
@@ -46,55 +45,47 @@ Archivo<DataType>::~Archivo(){
 }
 
 //Para paginas libres
-template <typename DataType>
-void Archivo<DataType>::moverCursor_Paglibres_Adelante(){
+void Archivo::moverCursor_Paglibres_Adelante(){
 	if(pagLibresCursor->frontLink != NULL){
 		pagLibresCursor = pagLibresCursor->frontLink;
 	}
 }
 
-template <typename DataType>
-void Archivo<DataType>::moverCursor_Paglibres_Atras(){
+void Archivo::moverCursor_Paglibres_Atras(){
 	if (pagLibresCursor->backLink != header){
 		pagLibresCursor = pagLibresCursor->backLink;
 	}
 }
 
-template <typename DataType>
-void Archivo<DataType>::moverCursor_PagLibres_AlFinal(){
+void Archivo::moverCursor_PagLibres_AlFinal(){
 	while(pagLibresCursor->frontLink != NULL){
 		pagLibresCursor = pagLibresCursor->frontLink;
 	}
 }
 
-template <typename DataType>
-void Archivo<DataType>::moverCursor_PagLibres_AlInicio(){
+void Archivo::moverCursor_PagLibres_AlInicio(){
 	pagLibresCursor = header;
 }
 
 //---------------------------------
 //Para paginas ocupadas
-template<typename DataType>
-void Archivo<DataType>::moverCursor_PagOcupadas_Adelante(){
+void Archivo::moverCursor_PagOcupadas_Adelante(){
 	if(pagOcupadasCursor->backLink != NULL){
 		pagOcupadasCursor = pagOcupadasCursor->backLink;
 	}
 }
 
-template <typename DataType>
-void Archivo<DataType>::moverCursor_PagOcupadas_Atras(){
+void Archivo::moverCursor_PagOcupadas_Atras(){
 	if(pagOcupadasCursor->frontLink != header){
 		pagOcupadasCursor = pagOcupadasCursor->frontLink;
 	}
 }
 
-template <typename DataType>
-void Archivo<DataType>::moverCursor_PagOcupadas_AlInicio(){
+void Archivo::moverCursor_PagOcupadas_AlInicio(){
 	pagOcupadasCursor = header;
 }
 
-template <typename DataType>
-void Archivo<DataType>::moverCursor_PagOcupadas_AlFinal(){
+void Archivo::moverCursor_PagOcupadas_AlFinal(){
 	while(pagOcupadasCursor->backLink != NULL){
 		pagOcupadasCursor = pagOcupadasCursor->backLink;
 	}
@@ -102,9 +93,8 @@ void Archivo<DataType>::moverCursor_PagOcupadas_AlFinal(){
 
 
 //Insertar y eliminar tuplas
-template <typename DataType>
-void Archivo<DataType>::insertarTupla(Tupla tupla){
-	//suponiendo que el cursor está en la ultima pagina
+void Archivo::insertarTupla(Tupla tupla){
+	//suponiendo que el cursor estï¿½ en la ultima pagina
 	if(pagLibresCursor == header){
 		crearPagina();
 		pagLibresCursor->pag.agregarTupla(tupla);
@@ -144,15 +134,16 @@ void Archivo<DataType>::eliminarTupla(){
 //Metodos privados
 
 //Crear Pagina
-template <typename DataType>
-void Archivo<DataType>::crearPagina(){
+void Archivo::crearPagina(){
 	//Crea una pagina en la celda de parametro
 	//moverCursor_PagLibres_AlFinal();
 	CeldaPagina *cp = new CeldaPagina;
-	DataType pg;
+	Pagina pg;
 	cp->pag = pg;
 	cp->frontLink = NULL;
 	cp->backLink = pagLibresCursor;
+	cp->idPag = idPag + 1;
+	this->idPag++;
 	pagLibresCursor->frontLink = cp;
 	pagLibresCursor = cp;
 }
@@ -165,10 +156,13 @@ void Archivo<DataType>::moverPaginaOcupada(){
 		(pagLibresCursor->backLink)->frontLink = pagLibresCursor->frontLink;
 
 
+
 	}else{
 		(pagLibresCursor->backLink)->frontLink = NULL;
 
 	}
+	pagLibresCursor = oldCelda->backLink;
+	moverCursor_PagLibres_AlFinal();
 	moverCursor_PagOcupadas_AlFinal();
 	pagOcupadasCursor->backLink = oldCelda;
 	oldCelda->frontLink = pagOcupadasCursor;
