@@ -55,6 +55,7 @@ private:
 	CeldaPagina *pagLibresCursor;
 
 	void crearPagina();
+	void moverPaginaOcupada();
 };
 
 #endif /* ARCHIVO_H_ */

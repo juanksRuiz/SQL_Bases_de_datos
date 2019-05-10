@@ -66,6 +66,7 @@ void ListaEnlazada::eliminarCaracter() {
 	}
 }
 
+
 void ListaEnlazada::mostrarContenido() {
 	for (Celda *cp = start->link; cp != NULL; cp = cp->link) {
 		cout << ' ' << cp->ch;
