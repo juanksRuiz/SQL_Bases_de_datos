@@ -97,7 +97,7 @@ void Archivo::insertarTupla(Tupla tupla){
 	//suponiendo que el cursor est� en la ultima pagina
 	if(pagLibresCursor == header){
 		crearPagina();
-		pagLibresCursor->pag.agregarTupla(tupla);
+		pagLibresCursor->pag
 		return;
 	}else{
 		pagLibresCursor = header->frontLink;
@@ -138,8 +138,7 @@ void Archivo::crearPagina(){
 	//Crea una pagina en la celda de parametro
 	//moverCursor_PagLibres_AlFinal();
 	CeldaPagina *cp = new CeldaPagina;
-	Pagina pg;
-	cp->pag = pg;
+	cp->pag = NULL;
 	cp->frontLink = NULL;
 	cp->backLink = pagLibresCursor;
 	cp->idPag = idPag + 1;

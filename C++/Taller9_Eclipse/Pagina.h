@@ -32,6 +32,8 @@ private:
 public:
 	Pagina();
 
+	//hacer onstructor de Pagina con  al menos una tupla
+
 	void agregarTupla(Tupla tupla);
 
 	void deleteTupleAt(int idx);
