@@ -29,7 +29,7 @@
 
 class Archivo {
 public:
-	Archivo();
+	Archivo(std::string id, std::list<std::string> misNombres, std::list<std::string> misTipos, std::list<bool> myIsFixedArray);
 
 	~Archivo();
 
@@ -53,7 +53,7 @@ public:
 
 	void insertarTupla(Tupla tupla);
 
-	void eliminarTupla();
+	void eliminarTupla(std::string idTupla);
 
 private:
 	// Estructura para almacenar cada pagina en una celda
@@ -61,9 +61,12 @@ private:
 	std::list<std::string> nombres;
 	std::list<std::string>  tipos ;
 	std::list<bool> isFixedArray;
+	int idxPL;
+
 
 	struct CeldaPagina{
-			Pagina pag =  Pagina(); // No reconoce la clase pagina
+			Pagina pag =  Pagina();
+			int idpag;
 			CeldaPagina *frontLink;
 			CeldaPagina *backLink;
 		};

@@ -5,6 +5,7 @@
  *      Author: lovelace
  */
 #include <iostream>
+#include <list>
 #include "Archivo.h"
 #include "Pagina.h"
 #include "Tupla.h"
@@ -13,10 +14,18 @@
 using namespace std;
 
 
-Archivo::Archivo(){
+Archivo::Archivo(string id, list<string> misNombres, list<string> misTipos, list<bool> myisFixedArray){
 	header = pagOcupadasCursor  = pagLibresCursor= new CeldaPagina;
 	header->frontLink = NULL;
 	header ->backLink = NULL;
+	//La pagina dek geader y el id del header no se asignan a nada ?
+	idArchivo = id;
+	nombres = misNombres;
+	tipos = misTipos;
+	isFixedArray = myisFixedArray;
+	idxPL = 0;
+
+
 }
 
 Archivo::~Archivo(){
@@ -97,13 +106,13 @@ void Archivo::insertarTupla(Tupla tupla){
 	//suponiendo que el cursor estï¿½ en la ultima pagina
 	if(pagLibresCursor == header){
 		crearPagina();
-		pagLibresCursor->pag
+		pagLibresCursor->pag;
 		return;
 	}else{
 		pagLibresCursor = header->frontLink;
 		while(pagLibresCursor->frontLink != NULL){
 			if(pagLibresCursor->pag.hasSpaceForTuple(tupla)){
-				pagLibresCursor->pag.agregarTupla(tupla);
+				pagLibresCursor->pag.insertarTupla(tupla);
 				if(pagLibresCursor->pag.getEspacioDisponible() == 0){
 						moverPaginaOcupada();
 					}
@@ -113,7 +122,7 @@ void Archivo::insertarTupla(Tupla tupla){
 			}
 		}
 		crearPagina();
-		pagLibresCursor->pag.agregarTupla(tupla);
+		pagLibresCursor->pag.insertarTupla(tupla);
 	}
 	if(pagLibresCursor->pag.getEspacioDisponible() == 0){
 		moverPaginaOcupada();
@@ -121,13 +130,30 @@ void Archivo::insertarTupla(Tupla tupla){
 
 }
 
-//Necesario ?
-/*
-template <typename DataType>
-void Archivo<DataType>::eliminarTupla(){
+//Se tiene acceso a cualquier tupla
+void Archivo::eliminarTupla(string idTupla){
+	//imprimir mensaje de error si no hay tupla alguna con ese id
+	pagLibresCursor = header->frontLink;
+	while(pagLibresCursor != NULL){
+		if(pagLibresCursor->pag.isTupleInside(idTupla)){
+			pagLibresCursor->pag.eliminarTupla(idTupla);
+			return;
+		}
+	}
+	pagLibresCursor = pagLibresCursor->backLink;
 
+	pagOcupadasCursor = header->backLink;
+	while(pagOcupadasCursor != NULL){
+			if(pagOcupadasCursor->pag.isTupleInside(idTupla)){
+				pagOcupadasCursor->pag.eliminarTupla(idTupla);
+				return;
+			}
+		}
+	pagOcupadasCursor = pagOcupadasCursor->frontLink;
+	cerr << "No se encontró la tupla con el id especificado." << endl;
+	return;
 }
-*/
+
 
 
 //----------------
@@ -138,17 +164,16 @@ void Archivo::crearPagina(){
 	//Crea una pagina en la celda de parametro
 	//moverCursor_PagLibres_AlFinal();
 	CeldaPagina *cp = new CeldaPagina;
-	cp->pag = NULL;
+	cp->pag = Pagina();
 	cp->frontLink = NULL;
 	cp->backLink = pagLibresCursor;
-	cp->idPag = idPag + 1;
-	this->idPag++;
+	idxPL++;
+	cp->idpag = idxPL;
 	pagLibresCursor->frontLink = cp;
 	pagLibresCursor = cp;
 }
 
-template <typename DataType>
-void Archivo<DataType>::moverPaginaOcupada(){
+void Archivo::moverPaginaOcupada(){
 	CeldaPagina *oldCelda = pagLibresCursor;
 	if(pagLibresCursor->frontLink != NULL){
 		(pagLibresCursor->frontLink)->backLink = pagLibresCursor->backLink;
@@ -168,3 +193,4 @@ void Archivo<DataType>::moverPaginaOcupada(){
 	oldCelda->backLink = NULL;
 	pagOcupadasCursor = pagOcupadasCursor->backLink;
 }
+

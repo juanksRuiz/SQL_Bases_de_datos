@@ -34,15 +34,17 @@ public:
 
 	//hacer onstructor de Pagina con  al menos una tupla
 
-	void agregarTupla(Tupla tupla);
+	void insertarTupla(Tupla tupla);
 
-	void deleteTupleAt(int idx);
+	void eliminarTupla(std::string idTupla);
 
 	bool hasSpaceForTuple(Tupla tupla);
 
 	int getEspaciosUsados();
 
 	int getEspacioDisponible();
+
+	bool isTupleInside(std::string idTuple);
 
 	bool isEmpty();
 

@@ -33,7 +33,7 @@ Pagina<TipoDato>::~Pagina(){
 }
 */
 
-void Pagina::agregarTupla(Tupla tupla){
+void Pagina::insertarTupla(Tupla tupla){
 	if(getEspacioDisponible() < tupla.getSize()){
 		cerr <<"ERROR: CAPACIDAD MAXIMA DE PAGINA ALCANZADA" << endl;
 		return;
@@ -46,19 +46,19 @@ void Pagina::agregarTupla(Tupla tupla){
 }
 
 
-void Pagina::deleteTupleAt(int idx){
+void Pagina::eliminarTupla(string idTuple){
 	//Borra siempre la ultima Tupla: como en el stack
 	if(count == 0){
 		cerr << "Error: intenta eliminar elemento de una Pagina vacia"<<endl;
 	}else{
-		espaciosUsados = espaciosUsados - tupleList.back().getSize();
-		posLast = posLast + tupleList.back().getSize();
-		list<Tupla>::iterator it;
-		it = tupleList.begin();
-		for(int i = 0; i < idx; i++){
-			advance(it,idx);
+		for(std::list<Tupla>::iterator it = tupleList.begin(); it != tupleList.end(); it++){
+			Tupla t = *it;
+			if(t.ID == idTuple){
+				espaciosUsados = espaciosUsados - t.getSize();
+				posLast = posLast + t.getSize();
+				return;
+			}
 		}
-		tupleList.erase(it);
 		count--;
 	}
 
@@ -68,6 +68,17 @@ bool Pagina::hasSpaceForTuple(Tupla tupla){
 	return (getEspacioDisponible() >= tupla.getSize());
 }
 
+
+bool Pagina::isTupleInside(string idTupla){
+	for(std::list<Tupla>::iterator it = tupleList.begin(); it != tupleList.end(); it++){
+		Tupla t = *it;
+		if(t.ID == idTupla){
+			return true;
+		}
+
+	}
+	return false;
+}
 int Pagina::getEspaciosUsados(){
 	return espaciosUsados;
 }
