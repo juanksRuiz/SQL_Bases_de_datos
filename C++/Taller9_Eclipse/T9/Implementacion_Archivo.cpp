@@ -6,6 +6,7 @@
  */
 #include <iostream>
 #include <list>
+#include <string>
 #include "Archivo.h"
 #include "Pagina.h"
 #include "Tupla.h"
@@ -16,7 +17,7 @@ using namespace std;
 
 Archivo::Archivo(string id, list<string> misNombres, list<string> misTipos, list<bool> myisFixedArray){
 	header = pagOcupadasCursor  = pagLibresCursor= new CeldaPagina;
-	header->frontLink = NULL;
+	crearPagina();
 	header ->backLink = NULL;
 	//La pagina dek geader y el id del header no se asignan a nada ?
 	idArchivo = id;
@@ -27,6 +28,7 @@ Archivo::Archivo(string id, list<string> misNombres, list<string> misTipos, list
 
 
 }
+
 
 Archivo::~Archivo(){
 	//Verificar
@@ -73,7 +75,7 @@ void Archivo::moverCursor_PagLibres_AlFinal(){
 }
 
 void Archivo::moverCursor_PagLibres_AlInicio(){
-	pagLibresCursor = header;
+	pagLibresCursor = header->frontLink;
 }
 
 //---------------------------------
@@ -91,7 +93,7 @@ void Archivo::moverCursor_PagOcupadas_Atras(){
 }
 
 void Archivo::moverCursor_PagOcupadas_AlInicio(){
-	pagOcupadasCursor = header;
+	pagOcupadasCursor = header->backLink;
 }
 
 void Archivo::moverCursor_PagOcupadas_AlFinal(){
@@ -104,39 +106,38 @@ void Archivo::moverCursor_PagOcupadas_AlFinal(){
 //Insertar y eliminar tuplas
 void Archivo::insertarTupla(Tupla tupla){
 	//suponiendo que el cursor estï¿½ en la ultima pagina
-	if(pagLibresCursor == header){
-		crearPagina();
-		pagLibresCursor->pag;
-		return;
-	}else{
-		pagLibresCursor = header->frontLink;
-		while(pagLibresCursor->frontLink != NULL){
-			if(pagLibresCursor->pag.hasSpaceForTuple(tupla)){
-				pagLibresCursor->pag.insertarTupla(tupla);
-				if(pagLibresCursor->pag.getEspacioDisponible() == 0){
-						moverPaginaOcupada();
-					}
-				return;
-			}else{
-				pagLibresCursor = pagLibresCursor->frontLink;
-			}
+	pagLibresCursor = header->frontLink;
+	while(pagLibresCursor->frontLink != NULL){
+		if(pagLibresCursor->pg.hasSpaceForTuple(tupla)){
+			pagLibresCursor->pg.insertarTupla(tupla);
+			if(pagLibresCursor->pg.getEspacioDisponible() == 0){
+					moverPaginaOcupada();
+				}
+			return;
+		}else{
+			pagLibresCursor = pagLibresCursor->frontLink;
 		}
-		crearPagina();
-		pagLibresCursor->pag.insertarTupla(tupla);
 	}
-	if(pagLibresCursor->pag.getEspacioDisponible() == 0){
+	if(pagLibresCursor->pg.hasSpaceForTuple(tupla)){
+		pagLibresCursor->pg.insertarTupla(tupla);
+}
+	if(pagLibresCursor->pg.getEspacioDisponible() == 0){
 		moverPaginaOcupada();
 	}
 
 }
 
+
+
 //Se tiene acceso a cualquier tupla
 void Archivo::eliminarTupla(string idTupla){
 	//imprimir mensaje de error si no hay tupla alguna con ese id
+
 	pagLibresCursor = header->frontLink;
 	while(pagLibresCursor != NULL){
-		if(pagLibresCursor->pag.isTupleInside(idTupla)){
-			pagLibresCursor->pag.eliminarTupla(idTupla);
+		if(pagLibresCursor->pg.isTupleInside(idTupla)){
+			cout << "Tupla encontrada: " << pagLibresCursor->pg.isTupleInside(idTupla);
+			pagLibresCursor->pg.eliminarTupla(idTupla);
 			return;
 		}
 	}
@@ -144,19 +145,41 @@ void Archivo::eliminarTupla(string idTupla){
 
 	pagOcupadasCursor = header->backLink;
 	while(pagOcupadasCursor != NULL){
-			if(pagOcupadasCursor->pag.isTupleInside(idTupla)){
-				pagOcupadasCursor->pag.eliminarTupla(idTupla);
+			if(pagOcupadasCursor->pg.isTupleInside(idTupla)){
+				pagOcupadasCursor->pg.eliminarTupla(idTupla);
 				return;
 			}
 		}
 	pagOcupadasCursor = pagOcupadasCursor->frontLink;
-	cerr << "No se encontró la tupla con el id especificado." << endl;
+	cerr << "No se encontrï¿½ la tupla con el id especificado." << endl;
 	return;
 }
 
+void Archivo::printArchivo(){
+	for(std::list<string>::iterator it = nombres.begin(); it != nombres.end(); it++){
+		cout << *it << '|';
+	}
+	cout << '\n' << endl;
+	pagLibresCursor = header->frontLink;
+	while(pagLibresCursor != NULL){
+		pagLibresCursor->pg.toString();
+		pagLibresCursor = pagLibresCursor->frontLink;
+	}
+}
+/*
+Pagina& Archivo::getPagina(Pagina *p){
+	pagLibresCursor = header->frontLink;
+	if(&(pagLibresCursor->pg) == p){
+		return p;
+	}else{
+		pagLibresCursor = pagLibresCursor->frontLink;
+	}
+	cout << "ERROR" << endl;
+}
+*/
 
 
-//----------------
+//--------------------------------------------------------------------------------------------------------------------
 //Metodos privados
 
 //Crear Pagina
@@ -164,7 +187,10 @@ void Archivo::crearPagina(){
 	//Crea una pagina en la celda de parametro
 	//moverCursor_PagLibres_AlFinal();
 	CeldaPagina *cp = new CeldaPagina;
+	/*
+	Pagina pg = Pagina();
 	cp->pag = Pagina();
+	*/
 	cp->frontLink = NULL;
 	cp->backLink = pagLibresCursor;
 	idxPL++;
@@ -183,8 +209,9 @@ void Archivo::moverPaginaOcupada(){
 
 	}else{
 		(pagLibresCursor->backLink)->frontLink = NULL;
+		}
 
-	}
+
 	pagLibresCursor = oldCelda->backLink;
 	moverCursor_PagLibres_AlFinal();
 	moverCursor_PagOcupadas_AlFinal();
@@ -192,5 +219,8 @@ void Archivo::moverPaginaOcupada(){
 	oldCelda->frontLink = pagOcupadasCursor;
 	oldCelda->backLink = NULL;
 	pagOcupadasCursor = pagOcupadasCursor->backLink;
+	if(pagLibresCursor == header){
+		crearPagina();
+	}
 }
 

@@ -51,9 +51,15 @@ public:
 
 	void moverCursor_PagOcupadas_AlInicio();
 
+	Pagina& getPagina(Pagina *pg);
+
+	void deletePagina(Pagina *pg);
+
 	void insertarTupla(Tupla tupla);
 
 	void eliminarTupla(std::string idTupla);
+
+	void printArchivo();
 
 private:
 	// Estructura para almacenar cada pagina en una celda
@@ -65,7 +71,7 @@ private:
 
 
 	struct CeldaPagina{
-			Pagina pag =  Pagina();
+			Pagina pg = Pagina();
 			int idpag;
 			CeldaPagina *frontLink;
 			CeldaPagina *backLink;
@@ -75,7 +81,7 @@ private:
 		CeldaPagina *pagOcupadasCursor;
 		CeldaPagina *pagLibresCursor;
 
-		void crearPagina();
+	void crearPagina();
 	void moverPaginaOcupada();
 };
 

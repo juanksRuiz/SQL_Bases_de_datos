@@ -53,7 +53,7 @@ void Pagina::eliminarTupla(string idTuple){
 	}else{
 		for(std::list<Tupla>::iterator it = tupleList.begin(); it != tupleList.end(); it++){
 			Tupla t = *it;
-			if(t.ID == idTuple){
+			if(t.getID() == idTuple){
 				espaciosUsados = espaciosUsados - t.getSize();
 				posLast = posLast + t.getSize();
 				return;
@@ -72,7 +72,7 @@ bool Pagina::hasSpaceForTuple(Tupla tupla){
 bool Pagina::isTupleInside(string idTupla){
 	for(std::list<Tupla>::iterator it = tupleList.begin(); it != tupleList.end(); it++){
 		Tupla t = *it;
-		if(t.ID == idTupla){
+		if(t.getID() == idTupla){
 			return true;
 		}
 
@@ -92,6 +92,16 @@ int Pagina::getEspacioDisponible(){
 bool Pagina::isEmpty(){
 	//cuenta el numero de tuplas
 	return count == 0;
+}
+
+void Pagina::toString(){
+	string linea = "--------------------------------------------------------------------------------------------";
+	for(std::list<Tupla>::iterator it = tupleList.begin(); it != tupleList.end(); it++){
+		Tupla t = *it;
+		cout << t.toString() << endl;
+		cout << linea << endl;
+
+	}
 }
 
 

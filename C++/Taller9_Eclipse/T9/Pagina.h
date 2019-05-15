@@ -48,7 +48,9 @@ public:
 
 	bool isEmpty();
 
-	~Pagina();
+	void toString();
+
+	//~Pagina();
 
 };
 

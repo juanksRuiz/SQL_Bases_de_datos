@@ -19,6 +19,7 @@ private:
 	std::string ID;
 	std::string Carrera;
 	int size;
+	std::string idTupla;
 
 public:
 	Tupla(std::string Nombres, std::string Apellidos, std::string ID, std::string Carrera);
@@ -30,6 +31,8 @@ public:
 	std::string getID();
 
 	std::string getCarrera();
+
+	std::string getIDTupla();
 
 	int getSize();
 

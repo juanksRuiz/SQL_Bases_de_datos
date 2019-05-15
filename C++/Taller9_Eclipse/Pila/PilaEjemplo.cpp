@@ -7,7 +7,7 @@
 
 #include "Pila.h"
 using namespace std;
-
+/*
 int main(){
 	Pila<char> pila;
 
@@ -52,3 +52,4 @@ int main(){
 }
 
 
+*/
