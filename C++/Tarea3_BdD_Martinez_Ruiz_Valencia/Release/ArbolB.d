@@ -1,0 +1,1 @@
+ArbolB.o: ../ArbolB.cpp
